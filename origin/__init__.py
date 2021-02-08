@@ -9,6 +9,9 @@ class Plugin_OBJ():
     def __init__(self, plugin_utils):
         self.plugin_utils = plugin_utils
 
+        self.tuners = self.plugin_utils.config.dict["youtube"]["tuners"]
+        self.stream_method = self.plugin_utils.config.dict["youtube"]["stream_method"]
+
         self.video_reference = {}
 
     def get_channel_thumbnail(self, videoid):
