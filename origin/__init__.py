@@ -9,17 +9,26 @@ class Plugin_OBJ():
     def __init__(self, plugin_utils):
         self.plugin_utils = plugin_utils
 
-        self.tuners = self.plugin_utils.config.dict["youtube"]["tuners"]
-        self.stream_method = self.plugin_utils.config.dict["youtube"]["stream_method"]
-
         self.video_reference = {}
+
+    @property
+    def tuners(self):
+        return self.plugin_utils.config.dict["youtube"]["tuners"]
+
+    @property
+    def stream_method(self):
+        return self.plugin_utils.config.dict["youtube"]["stream_method"]
+
+    @property
+    def youtube_api_key(self):
+        return self.plugin_utils.config.dict["youtube"]["api_key"]
 
     def get_channel_thumbnail(self, videoid):
         if "channel_thumbnail" not in list(self.video_reference[videoid].keys()):
 
             channel_id = self.video_reference[videoid]["channel_id"]
             channel_api_url = ('https://www.googleapis.com/youtube/v3/channels?id=%s&part=snippet,contentDetails&key=%s' %
-                               (channel_id, str(self.plugin_utils.config.dict["youtube"]["api_key"])))
+                               (channel_id, self.youtube_api_key))
             channel_response = urllib.request.urlopen(channel_api_url)
             channel_data = json.load(channel_response)
 
@@ -46,7 +55,7 @@ class Plugin_OBJ():
                 self.video_reference[station_item["videoid"]] = {}
 
             video_api_url = ('https://www.googleapis.com/youtube/v3/videos?id=%s&part=snippet,contentDetails&key=%s' %
-                             (station_item["videoid"], str(self.plugin_utils.config.dict["youtube"]["api_key"])))
+                             (station_item["videoid"], self.youtube_api_key))
             video_response = urllib.request.urlopen(video_api_url)
             video_data = json.load(video_response)
 
